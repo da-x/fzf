@@ -70,6 +70,7 @@ type LightRenderer struct {
 	mouse         bool
 	forceBlack    bool
 	clearOnExit   bool
+	scrollBackOnExit   bool
 	prevDownTime  time.Time
 	clickY        []int
 	ttyin         *os.File
@@ -111,12 +112,13 @@ type LightWindow struct {
 	bg       Color
 }
 
-func NewLightRenderer(theme *ColorTheme, forceBlack bool, mouse bool, tabstop int, clearOnExit bool, fullscreen bool, maxHeightFunc func(int) int) Renderer {
+func NewLightRenderer(theme *ColorTheme, forceBlack bool, mouse bool, tabstop int, clearOnExit bool, scrollBackOnExit bool, fullscreen bool, maxHeightFunc func(int) int) Renderer {
 	r := LightRenderer{
 		theme:         theme,
 		forceBlack:    forceBlack,
 		mouse:         mouse,
 		clearOnExit:   clearOnExit,
+		scrollBackOnExit: scrollBackOnExit,
 		ttyin:         openTtyIn(),
 		yoffset:       0,
 		tabstop:       tabstop,
@@ -624,11 +626,15 @@ func (r *LightRenderer) Close() {
 		if r.fullscreen {
 			r.rmcup()
 		} else {
-			r.origin()
-			if r.upOneLine {
-				r.csi("A")
+			if r.scrollBackOnExit && r.height >= 2 {
+			    r.csi(fmt.Sprintf("%d+T", r.height - 1));
+			} else {
+			    r.origin()
+			    if r.upOneLine {
+				    r.csi("A")
+			    }
+			    r.csi("J")
 			}
-			r.csi("J")
 		}
 	} else if !r.fullscreen {
 		r.csi("u")

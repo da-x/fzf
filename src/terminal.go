@@ -435,7 +435,7 @@ func NewTerminal(opts *Options, eventBox *util.EventBox) *Terminal {
 		if tui.HasFullscreenRenderer() {
 			renderer = tui.NewFullscreenRenderer(opts.Theme, opts.Black, opts.Mouse)
 		} else {
-			renderer = tui.NewLightRenderer(opts.Theme, opts.Black, opts.Mouse, opts.Tabstop, opts.ClearOnExit,
+			renderer = tui.NewLightRenderer(opts.Theme, opts.Black, opts.Mouse, opts.Tabstop, opts.ClearOnExit, opts.ScrollBackOnExit,
 				true, func(h int) int { return h })
 		}
 	} else {
@@ -459,7 +459,7 @@ func NewTerminal(opts *Options, eventBox *util.EventBox) *Terminal {
 			}
 			return util.Min(termHeight, util.Max(maxHeight, effectiveMinHeight))
 		}
-		renderer = tui.NewLightRenderer(opts.Theme, opts.Black, opts.Mouse, opts.Tabstop, opts.ClearOnExit, false, maxHeightFunc)
+		renderer = tui.NewLightRenderer(opts.Theme, opts.Black, opts.Mouse, opts.Tabstop, opts.ClearOnExit, opts.ScrollBackOnExit, false, maxHeightFunc)
 	}
 	wordRubout := "[^\\pL\\pN][\\pL\\pN]"
 	wordNext := "[\\pL\\pN][^\\pL\\pN]|(.$)"

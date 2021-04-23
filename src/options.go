@@ -228,6 +228,7 @@ type Options struct {
 	Unicode     bool
 	Tabstop     int
 	ClearOnExit bool
+	ScrollBackOnExit bool
 	Version     bool
 }
 
@@ -288,6 +289,7 @@ func defaultOptions() *Options {
 		Unicode:     true,
 		Tabstop:     8,
 		ClearOnExit: true,
+		ScrollBackOnExit: false,
 		Version:     false}
 }
 
@@ -1417,6 +1419,10 @@ func parseOptions(opts *Options, allArgs []string) {
 			opts.ClearOnExit = true
 		case "--no-clear":
 			opts.ClearOnExit = false
+		case "--scrollback":
+			opts.ScrollBackOnExit = true
+		case "--no-scrollback":
+			opts.ScrollBackOnExit = false
 		case "--version":
 			opts.Version = true
 		default:
